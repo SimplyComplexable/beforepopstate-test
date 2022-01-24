@@ -4,17 +4,20 @@ import React from "react";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const setIsOpen = () => {
+  const setIsOpen = React.useCallback(() => {
     alert('hello');
-  }
-  React.useEffect(() => {
+  }, [])
+  const onMount = React.useCallback(async() => {
     router.push('/', '/asdf', { shallow: true });
+  }, [setIsOpen, router.route])
+
+  React.useEffect(() => {
     router.beforePopState(() => {
-        setIsOpen(true);
+      setIsOpen(true);
       return true;
     });
-
-  }, [setIsOpen, router.route]);
+  },[setIsOpen, router])
+  React.useEffect(onMount, [onMount]);
   return <Component {...pageProps} />
 }
 
